@@ -1,0 +1,3 @@
+S'a:3:{i:0;s:19:"akismet/akismet.php";i:1;s:41:"better-wp-security/better-wp-security.php";i:2;s:9:"hello.php";}'
+p0
+.

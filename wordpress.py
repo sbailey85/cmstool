@@ -6,18 +6,7 @@ import MySQLdb as mysql
 import os
 
 host = "localhost"
-
-
-def Main():
-    if os.path.isfile("wp-config.php"):
-        print("hi")
-
-    else:
-        print("no")
-
-
 wpcfg = open("wp-config.php")
-
 userRE = re.compile("(.*)DB_USER\'\,.\'(.*)\'")
 dbpassRE = re.compile("(.*)DB_PASSWORD\'\,.\'(.*)\'")
 
@@ -56,7 +45,7 @@ def DBNAME():
 
 password = dbpass()
 user = dbuser()
-db = DBNAME()
+db1 = DBNAME()
 
 
 def wordpressmysql(query):
@@ -87,9 +76,6 @@ def unpickle():
     x = pickle.load(open("plugins.pkl"))
     return x
 
-def restorePLUGINS():
-
-    wordpressmysql()
 unpickled = unpickle()
 def backuprestore():
     x ="update wp_options set option_value = '%s' where option_name = 'active_plugins'" %y
@@ -98,7 +84,7 @@ def backuprestore():
     return x
 y = unpickled
 
-test = mysql.connect(host, user, password, db)
+test = mysql.connect(host, user, password, "test")
 cursor = test.cursor()
 query = ("update wp_options set option_value = ''" "where option_name = 'active_plugins'")
 
@@ -115,4 +101,34 @@ update wp_options
 set option_value=''
 where option_name='active_plugins'
 """
+
+class dbConnect(object):
+    def __init__(self,host="localhost",
+    user="user",
+    passwd="password",
+    **other_db_arguments):
+        self.host = host
+        self.user = user
+        self.passwd = passwd
+
+
+        def Connection_Create(self):
+            self.connection = mysql.connect(self.host,self.user,self.passwd)
+
+        def KillConnection(self):
+            self.connection.close()
+
+        def Execute(self,sql):
+            cursor = self.connection.cursor()
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            cursor.close()
+            return result
+
+
+
+a = dbConnect("hi")
+
+
+
 
