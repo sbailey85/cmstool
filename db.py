@@ -9,7 +9,7 @@ password = "password"
 db = "test"
 user = "test"
 cms = ["wordpress","joomla","magento"]
-
+dd = "dd"
 def connect(host,user,password,database):
 
     try:
