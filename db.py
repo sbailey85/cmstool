@@ -26,4 +26,4 @@ def connect(host,user,password,database):
 
 
 
-
+rgregfre = 3
