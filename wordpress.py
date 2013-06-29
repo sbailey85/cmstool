@@ -11,62 +11,56 @@ if __name__ == '__main__':
 			sys.exit(1)
 	else:
 		pass
+#~ wpcfg = open("wp-config.php")
+#~ dbpassRE = re.compile("(.*)DB_PASSWORD\'\,.\'(.*)\'")
 
+#~ def dbuser():
+	#~ with open("wp-config.php") as f:
+		#~ for lines in f.readlines():
+			#~ match = userRE.search(lines)
+			#~ if match:
+				#~ return match.group(2)
+			#~ 
 
-host = "localhost"
-wpcfg = open("wp-config.php")
-userRE = re.compile("(.*)DB_USER\'\,.\'(.*)\'")
-dbpassRE = re.compile("(.*)DB_PASSWORD\'\,.\'(.*)\'")
+class WPparser():
+	def __init__(self):
+		def dbuser():
+			userRE = re.compile("(.*)DB_USER\'\,.\'(.*)\'")
+			with open("wp-config.php") as f:
+				for lines in f.readlines():
+					match = userRE.search(lines)
+				if match:
+					return match.group(2)
+		def dbpass():
+			with open("wp-config.php") as f:
+				for lines in f:
+					match = re.search("DB_PASSWORD\'\,.\'(.*)\'", lines)
+				if match:
+					return match.group(1)
+		def DBNAME():
+			with open("wp-config.php") as y:
+				for x in y.readlines():
+					match = re.search("DB_NAME\'\,.\'(.*)\'", x)
+				if match:
+					return match.group(1)			
 
 		
-			
-
-def dbname():
-    for x in wpcfg.readlines():
-        search = re.search(".DB_NAME.*", x)
-        if search:
-            result = search
-            return result
-
-
-def dbuser():
-    for x in wpcfg.readlines():
-        match = userRE.search(x)
-        if match:
-            result = match.group(2)
-            return result
-
-
-def dbpass():
-    with open("wp-config.php") as f:
-        for lines in f:
-            match = re.search("DB_PASSWORD\'\,.\'(.*)\'", lines)
-            if match:
-                return match.group(1)
-
-
-def DBNAME():
-    with open("wp-config.php") as y:
-        for x in y.readlines():
-            match = re.search("DB_NAME\'\,.\'(.*)\'", x)
-            if match:
-                return match.group(1)
-
-
-password = dbpass()
-user = dbuser()
-db1 = DBNAME()
-
+		self.host = "localhost"
+		self.passwd = dbpass()
+		self.db = DBNAME()
+		self.usern = dbuser()
 
 def wordpressmysql(query):
-    connectdb = mysql.connect(host, user, password, db)
-    var = connectdb.cursor()
-    x = var.execute(query)
-    result = var.fetchall()
-    connectdb.commit()
-    connectdb.close()
-
-
+		host = "localhost"
+		user = "test"
+		password = "test"
+		db = "test"
+		connectdb = mysql.connect(host, user, password, db)
+		var = connectdb.cursor()
+		x = var.execute(query)
+		result = var.fetchall()
+		connectdb.commit()
+		connectdb.close()
 
 # Queries
 homeurl = """select option_value from wp_options where option_name = home"""
@@ -79,7 +73,6 @@ def backupplugs():
     a = wordpressmysql(plugs)
     y = str(a[0])
     pickle.dump(y,open("plugins.pkl", "wb"))
-
 
 import pickle
 def unpickle():
@@ -94,8 +87,8 @@ def backuprestore():
     return x
 y = unpickled
 
-test = mysql.connect(host, user, password, "test")
-cursor = test.cursor()
+
+host = "localhost"
 query = ("update wp_options set option_value = ''" "where option_name = 'active_plugins'")
 
 
@@ -114,16 +107,17 @@ where option_name='active_plugins'
 
 
 class connection:
-
     def __init__(self):
-        self.conn = mysql.connect(host = "localhost",user = "test",
-                             passwd = "test", db = "test"
+		x = WPparser()
+		self.conn = mysql.connect(host = x.host ,user = x.usern,
+                             passwd = x.passwd, db = x.db
                              )
 
     def TearDown(self):
         self.conn.close()
     def nume(self):
         return self.conn
+
 
 
 
