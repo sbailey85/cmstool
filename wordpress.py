@@ -2,14 +2,24 @@ import db
 
 import re
 import MySQLdb as mysql
-
+import sys
 import os
+
+if __name__ == '__main__':
+	if not os.path.exists("wp-config.php"):
+			print("wp-config.php does not exist in current directory")
+			sys.exit(1)
+	else:
+		pass
+
 
 host = "localhost"
 wpcfg = open("wp-config.php")
 userRE = re.compile("(.*)DB_USER\'\,.\'(.*)\'")
 dbpassRE = re.compile("(.*)DB_PASSWORD\'\,.\'(.*)\'")
 
+		
+			
 
 def dbname():
     for x in wpcfg.readlines():
@@ -102,32 +112,23 @@ set option_value=''
 where option_name='active_plugins'
 """
 
-class dbConnect(object):
-    def __init__(self,host="localhost",
-    user="user",
-    passwd="password",
-    **other_db_arguments):
-        self.host = host
-        self.user = user
-        self.passwd = passwd
 
+class connection:
 
-        def Connection_Create(self):
-            self.connection = mysql.connect(self.host,self.user,self.passwd)
+    def __init__(self):
+        self.conn = mysql.connect(host = "localhost",user = "test",
+                             passwd = "test", db = "test"
+                             )
 
-        def KillConnection(self):
-            self.connection.close()
-
-        def Execute(self,sql):
-            cursor = self.connection.cursor()
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            cursor.close()
-            return result
+    def TearDown(self):
+        self.conn.close()
+    def nume(self):
+        return self.conn
 
 
 
-a = dbConnect("hi")
+
+
 
 
 
